@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Giao diện căn giữa</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="top">
+      <h2 class="title">Tool Soi Cầu AI 4.0</h2>
+      <div class="top-text">Danh sách cầu hiện có:</div>
+      <div id="mangBanDauDisplay"></div>
+    </div>
+    <div class="middle">
+      <div class="left">
+        <form id="addForm">
+          <label for="addInput">Nhập cầu (ví dụ: 123):</label><br>
+          <input type="text" id="addInput" name="addInput" placeholder="Nhập vào danh sách cầu"
+            oninput="formatNumber('addInput', 'addFormatted')"><br>
+          <span id="addFormatted"></span><br>
+          <input type="submit" value="Thêm mảng">
+          <button id="resetBtn">Reset mảng ban đầu</button>
+        </form>
+
+      </div>
+      <div class="right">
+        <form id="searchForm">
+          <label for="searchInput">Dư đoán cầu kế tiếp(ví dụ: 123):</label><br>
+          <input type="text" id="searchInput" name="searchInput" placeholder="Nhập vào chuỗi cầu cần tìm"
+            oninput="formatNumber('searchInput', 'searchFormatted')"><br>
+          <span id="searchFormatted"></span><br>
+          <input type="submit" value="Tìm kiếm">
+        </form>
+      </div>
+    </div>
+    <div class="bottom">
+      <span">Cầu dự đoán là:</span>
+      <span id="result"></span>
+    </div>
+  </div>
+  <script src="./script.js"></script>
+</body>
+
+</html>

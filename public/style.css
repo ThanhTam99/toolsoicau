@@ -1,0 +1,142 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    color: #696969
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #77ACC7;
+}
+
+.title {
+    width: fit-content;
+    border: 1px solid #77ACC7;
+    text-align: center;
+    font-weight: bold;
+    color: #FF8C00 !important;
+    background-color: #e6e6e6;
+}
+
+.top {
+    /* Căn chỉnh phần trên tùy ý */
+    background-color: #f2f2f2;
+    padding: 10px 0 20px 20px;
+    width: 70%;
+    border-radius: 1px solid #f2f2f2;
+    max-height: 300px;  /* Đặt chiều cao tối đa */
+    overflow-y: auto;   /* Cho phép cuộn dọc */
+}
+.top-text{
+    font-weight: bold;
+}
+
+/* CSS */
+.table-container {
+    display: inline-block;  /* Make the containers sit side by side */
+    margin: 10px 5px 0 0;    /* Add some space between the tables */
+}
+
+table {
+    display: flex;
+    flex-direction: row;
+    gap: 1em; /* Change this to adjust the space between columns */
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    border: 1px solid black;
+    padding-bottom: 3px;
+    width: 20px; 
+    height: 20px; 
+    text-align: center; 
+}
+
+.circle-white, .circle-blue, .circle-green, .circle-yellow, .circle-orange {
+    border: 1px solid black;
+    border-radius: 50%;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    text-align: center;
+    color: white;
+    font-size: 10px;
+}
+
+.middle {
+    /* Chia đôi phần dưới */
+    display: flex;
+    flex-direction: row;
+    width: 71.6%;
+    
+}
+
+.left,
+.right {
+    /* Căn chỉnh phần bên trái và bên phải tùy ý */
+    padding: 20px;
+    flex: 1;
+    border-radius: 1px solid #f2f2f2;
+    background-color: #e6e6e6;
+}
+
+form {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#searchInput,
+#addInput {
+    width: 50%;
+}
+
+button,
+input {
+    margin: 2px 2px 0 0;
+    color: #696969;
+    cursor: pointer;
+}
+
+#result {
+    font-weight: bold;
+}
+
+.circle-white {
+    background-color: white;
+    color: #696969;
+}
+
+.circle-blue {
+    background-color: blue;
+}
+
+.circle-green {
+    background-color: green;
+}
+
+.circle-yellow {
+    background-color: yellow;
+    color: #696969;
+}
+
+.circle-orange {
+    background-color: orange;
+}
+.bottom{
+    background-color: #f2f2f2;
+    padding: 10px 0 20px 20px;
+    width: 70%;
+    border-radius: 1px solid #f2f2f2;
+    font-weight: bold;
+}
