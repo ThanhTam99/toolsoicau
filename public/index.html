@@ -20,6 +20,8 @@
           <label for="addInput">Nhập cầu (ví dụ: 123):</label><br>
           <input type="text" id="addInput" name="addInput" placeholder="Nhập vào danh sách cầu"
             oninput="formatNumber('addInput', 'addFormatted')"><br>
+            <label for="addInput">Nhập số cột (thường là 6 hoặc 7):</label><br>
+          <input type="text" id="columnNum" name="columnNum" placeholder="Số cột..."><br>
           <span id="addFormatted"></span><br>
           <input type="submit" value="Thêm mảng">
           <button id="resetBtn">Reset mảng ban đầu</button>
@@ -36,12 +38,14 @@
         </form>
       </div>
     </div>
+    <div class="resetButton"><button id="resetInputsBtn">Reset All Inputs</button></div>
     <div class="bottom">
       <span">Cầu dự đoán là:</span>
       <span id="result"></span>
     </div>
   </div>
   <script src="./script.js"></script>
+
 </body>
 
 </html>

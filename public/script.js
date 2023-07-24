@@ -44,9 +44,7 @@ function updateMangBanDauDisplay() {
                     tableData.push('<tr>' + tableRow.join('') + '</tr>');
                 }
                 tablesData.push(`<div class="table-container"><table>${tableData.join('')}</table></div>`);
-
             });
-
             document.getElementById('mangBanDauDisplay').innerHTML = tablesData.join('');
         }
     });
@@ -70,23 +68,54 @@ function formatNumber(number) {
 }
 
 // Prevent non-digit input and remove all whitespace characters
-document.getElementById('addInput').addEventListener('input', function(e) {
+document.getElementById('addInput').addEventListener('input', function (e) {
     let input = this.value.replace(/\s/g, '');
     this.value = input.replace(/[^0-4]/g, '');
 });
 
 document.getElementById('addForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    let mangMoi = Array.from(document.getElementById('addInput').value).map(Number);
-    if (mangMoi.some(num => num < 0 || num > 4 || isNaN(num))) {
-        alert('Vui lòng chỉ nhập số từ 0 đến 4.');
-        return;
+
+    var inputValue = document.getElementById('addInput').value;
+    let soColumn = parseInt(document.getElementById('columnNum').value);
+    let arrHandle = [];
+
+    console.log(soColumn);
+
+    if (!isNaN(soColumn)) {
+        console.log('alo');
+        // Chia chuỗi đã xử lý thành các chuỗi con có độ dài bằng với soColumn
+        let segments = [];
+        for (let i = 0; i < inputValue.length; i += soColumn) {
+            segments.push(inputValue.slice(i, i + soColumn).split(''));
+        }
+
+        // tạo mảng kết quả
+        let arrHandles = [];
+        for (let i = 0; i < soColumn; i++) {
+            let temp = [];
+            for (let j = 0; j < segments.length; j++) {
+                if (segments[j][i] !== undefined) {
+                    temp.push(parseInt(segments[j][i]));
+                }
+            }
+            arrHandles.push(temp);
+        }
+        arrHandles.forEach(function (arr) {
+            arrHandle = arrHandle.concat(arr);
+        });
+    } else {
+        arrHandle = Array.from(inputValue).map(Number);
+        if (arrHandle.some(num => num < 0 || num > 4 || isNaN(num))) {
+            alert('Vui lòng chỉ nhập số từ 0 đến 4.');
+            return;
+        }
     }
     $.ajax({
         url: 'http://localhost:3000/addData',
         method: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify(mangMoi),
+        data: JSON.stringify(arrHandle),
         success: function () {
             document.getElementById('addInput').value = '';
             updateMangBanDauDisplay();
@@ -94,7 +123,6 @@ document.getElementById('addForm').addEventListener('submit', function (event) {
         }
     });
 });
-
 
 document.getElementById('resetBtn').addEventListener('click', function (event) {
     $.ajax({
@@ -107,7 +135,7 @@ document.getElementById('resetBtn').addEventListener('click', function (event) {
     });
 });
 
-document.getElementById('searchInput').addEventListener('input', function(e) {
+document.getElementById('searchInput').addEventListener('input', function (e) {
     let input = this.value.replace(/\s/g, '');
     this.value = input.replace(/[^0-4]/g, '');
 });
@@ -147,9 +175,14 @@ document.getElementById('searchForm').addEventListener('submit', function (event
     });
 });
 
+document.getElementById('resetInputsBtn').addEventListener('click', function (event) {
+    // Reset các giá trị input
+    document.getElementById('addInput').value = '';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('columnNum').value = '';
+});
+
+
 // Update the display when the page is first loaded
 updateMangBanDauDisplay();
-
-
-
 
