@@ -80,7 +80,7 @@ document.getElementById('addForm').addEventListener('submit', function (event) {
     let soColumn = parseInt(document.getElementById('columnNum').value);
     let arrHandle = [];
 
-    console.log(soColumn);
+    console.log(typeof soColumn);
 
     if (!isNaN(soColumn)) {
         console.log('alo');
