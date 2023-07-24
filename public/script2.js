@@ -19,29 +19,35 @@ function createColumns(arr) {
     return columns;
 }
 
-function updateMangBanDauDisplay(ketQuaMangCon = []) {
-    let tablesData = [];
+function updateMangBanDauDisplay() {
+    $.ajax({
+        url: 'http://localhost:3000/getData',
+        method: 'GET',
+        success: function (data) {
+            let tablesData = [];
 
-    // Create columns
-    ketQuaMangCon.forEach((arr) => {
-        let columns = createColumns(arr);
+            // Create columns
+            data.forEach((arr) => {
+                let columns = createColumns(arr);
 
-        // Determine the maximum number of rows
-        let maxRows = Math.max(...columns.map(subColumn => subColumn.length));
+                // Determine the maximum number of rows
+                let maxRows = Math.max(...columns.map(subColumn => subColumn.length));
 
-        // Generate table
-        let tableData = [];
-        for (let i = 0; i < maxRows; i++) {
-            let tableRow = [];
-            columns.forEach(subColumn => {
-                let cellContent = (subColumn[i] !== undefined) ? formatNumber(subColumn[i]) : '';
-                tableRow.push('<td>' + cellContent + '</td>');
+                // Generate table
+                let tableData = [];
+                for (let i = 0; i < maxRows; i++) {
+                    let tableRow = [];
+                    columns.forEach(subColumn => {
+                        let cellContent = (subColumn[i] !== undefined) ? formatNumber(subColumn[i]) : '';
+                        tableRow.push('<td>' + cellContent + '</td>');
+                    });
+                    tableData.push('<tr>' + tableRow.join('') + '</tr>');
+                }
+                tablesData.push(`<div class="table-container"><table>${tableData.join('')}</table></div>`);
             });
-            tableData.push('<tr>' + tableRow.join('') + '</tr>');
+            document.getElementById('mangBanDauDisplay').innerHTML = tablesData.join('');
         }
-        tablesData.push(`<div class="table-container"><table>${tableData.join('')}</table></div>`);
     });
-    document.getElementById('mangBanDauDisplay').innerHTML = tablesData.join('');
 }
 
 function formatNumber(number) {
@@ -74,14 +80,17 @@ document.getElementById('addForm').addEventListener('submit', function (event) {
     let soColumn = parseInt(document.getElementById('columnNum').value);
     let arrHandle = [];
 
+    console.log(typeof soColumn);
+
     if (!isNaN(soColumn)) {
-        // Split the input into segments of length soColumn
+        console.log('alo');
+        // Chia chuỗi đã xử lý thành các chuỗi con có độ dài bằng với soColumn
         let segments = [];
         for (let i = 0; i < inputValue.length; i += soColumn) {
             segments.push(inputValue.slice(i, i + soColumn).split(''));
         }
 
-        // Create the resulting array
+        // tạo mảng kết quả
         let arrHandles = [];
         for (let i = 0; i < soColumn; i++) {
             let temp = [];
@@ -109,7 +118,8 @@ document.getElementById('addForm').addEventListener('submit', function (event) {
         data: JSON.stringify(arrHandle),
         success: function () {
             document.getElementById('addInput').value = '';
-            // updateMangBanDauDisplay(); // Comment out this line to prevent the display from updating here
+            updateMangBanDauDisplay();
+            // alert('Thêm mảng thành công');
         }
     });
 });
@@ -119,7 +129,7 @@ document.getElementById('resetBtn').addEventListener('click', function (event) {
         url: 'http://localhost:3000/resetData',
         method: 'POST',
         success: function () {
-            // updateMangBanDauDisplay(); // Comment out this line to prevent the display from updating here
+            updateMangBanDauDisplay();
             alert('Đã reset mảng ban đầu');
         }
     });
@@ -134,38 +144,44 @@ document.getElementById('searchInput').addEventListener('input', function (e) {
 document.getElementById('searchForm').addEventListener('submit', function (event) {
     event.preventDefault();
     let mangNhapVao = document.getElementById('searchInput').value.split('').map(Number);
-    let ketQuaMangCon = [];
     let ketQua = [];
     // Fetch the current state of the array
     $.ajax({
         url: 'http://localhost:3000/getData',
         method: 'GET',
         success: function (data) {
-            if (data) {
-                mangBanDau = data;
-                mangBanDau.forEach(mangCon => {
-                    let i = 0;
-                    while (i < mangCon.length) {
-                        if (mangCon.slice(i, i + mangNhapVao.length).toString() === mangNhapVao.toString() && i + mangNhapVao.length < mangCon.length) {
-                            ketQuaMangCon.push(mangCon);
-                            ketQua.push(mangCon[i + mangNhapVao.length]);
-                            break; // break the loop as soon as we find a match
-                        }
-                        i++;
+            mangBanDau = data;
+            mangBanDau.forEach(mangCon => {
+                let i = 0;
+                console.log(mangCon);
+                while (i < mangCon.length) {
+                    if (mangCon.slice(i, i + mangNhapVao.length).toString() === mangNhapVao.toString() && i + mangNhapVao.length < mangCon.length) {
+                        ketQua.push(mangCon[i + mangNhapVao.length]);
+                        break; // break the loop as soon as we find a match
                     }
-                });
-                console.log(ketQua);
-                if (ketQua.length > 0) {
-                    updateMangBanDauDisplay(ketQuaMangCon);  // Update the display with the search results
-                    let formattedResult = ketQua.map(formatNumber).join(' ');
-                    document.getElementById('result').innerHTML = formattedResult;
-                } else {
-                    document.getElementById('mangBanDauDisplay').innerHTML = 'Không tìm thấy kết quả';
-                    alert('Không tìm thấy kết quả');
+                    i++;
                 }
+            });
+            if (ketQua.length > 0) {
+                // Format each result before displaying it
+                let formattedResult = ketQua.map(formatNumber).join(' ');
+                document.getElementById('result').innerHTML = formattedResult;
+                // alert('Tìm kiếm thành công');
+            } else {
+                document.getElementById('result').textContent = 'Không tìm thấy kết quả';
+                alert('Không tìm thấy kết quả');
             }
         }
     });
+});
+
+// Update the display when the page is first loaded
+$.ajax({
+    url: 'http://localhost:3000/getData',
+    method: 'GET',
+    success: function (data) {
+        updateMangBanDauDisplay(data);
+    }
 });
 
 document.getElementById('resetInputsBtn').addEventListener('click', function (event) {
@@ -175,13 +191,7 @@ document.getElementById('resetInputsBtn').addEventListener('click', function (ev
     document.getElementById('columnNum').value = '';
 });
 
+
 // Update the display when the page is first loaded
-$.ajax({
-    url: 'http://localhost:3000/getData',
-    method: 'GET',
-    success: function (data) {
-        if (data) {
-            updateMangBanDauDisplay(data);
-        }
-    }
-});
+updateMangBanDauDisplay();
+
